@@ -1,0 +1,117 @@
+{
+  "overwriteExisting": false,
+  "fields": [
+    {
+      "keywords": ["first name", "given name", "forename", "fname"],
+      "value": "Your first name"
+    },
+    {
+      "keywords": ["last name", "family name", "surname", "lname"],
+      "value": "Your last name"
+    },
+    {
+      "keywords": ["full name", "your name", "name"],
+      "value": "Your full name"
+    },
+    {
+      "keywords": ["school email", "university email", "college email", "academic email", "student email", "institutional email", "edu email"],
+      "value": "you@school.edu",
+      "priority": 1
+    },
+    {
+      "keywords": ["email", "email address"],
+      "value": "you@example.com"
+    },
+    {
+      "keywords": ["phone", "telephone", "mobile"],
+      "value": "+15551234567"
+    },
+    {
+      "keywords": ["linkedin", "linkedin url"],
+      "value": "https://www.linkedin.com/in/your-profile/"
+    },
+    {
+      "keywords": ["portfolio", "website", "personal site"],
+      "value": "https://example.com"
+    },
+    {
+      "keywords": ["location", "city", "current location"],
+      "value": "Your city, country"
+    },
+    {
+      "keywords": ["school", "university", "college", "institution"],
+      "value": "Your university"
+    },
+    {
+      "keywords": ["degree", "qualification"],
+      "value": "Bachelor's Degree",
+      "selectPartialMatch": true
+    },
+    {
+      "keywords": ["discipline", "major", "field of study", "area of study"],
+      "value": "Your field of study"
+    },
+    {
+      "keywords": ["start date"],
+      "value": "2025-09-01",
+      "inputTypes": ["date"]
+    },
+    {
+      "keywords": ["start date year", "start year"],
+      "value": "2025",
+      "inputTypes": ["number", "text"]
+    },
+    {
+      "keywords": ["start month", "start date month"],
+      "value": "September",
+      "selectPartialMatch": true
+    },
+    {
+      "keywords": ["end date", "graduation date"],
+      "value": "2029-05-01",
+      "inputTypes": ["date"]
+    },
+    {
+      "keywords": ["end date year", "end year", "graduation year"],
+      "value": "2029",
+      "inputTypes": ["number", "text"]
+    },
+    {
+      "keywords": ["end month", "end date month", "graduation month"],
+      "value": "May",
+      "selectPartialMatch": true
+    },
+    {
+      "keywords": ["work authorization", "authorized to work", "legally authorized", "eligible to work", "eligible to work in united states", "work in united states"],
+      "value": "No"
+    },
+    {
+      "keywords": ["gender identity", "gender identification"],
+      "value": "Your gender identity"
+    },
+    {
+      "keywords": ["gender"],
+      "value": "Your gender"
+    },
+    {
+      "keywords": ["race", "racial identity"],
+      "value": "Your race"
+    },
+    {
+      "keywords": ["pronouns", "personal pronouns"],
+      "value": "Your pronouns"
+    },
+    {
+      "keywords": ["military veteran", "veteran status", "protected veteran", "veteran"],
+      "value": "No"
+    },
+    {
+      "keywords": ["disability", "disability status", "disabled"],
+      "value": "No"
+    },
+    {
+      "keywords": ["require sponsorship", "need sponsorship", "visa sponsorship"],
+      "value": "No"
+    }
+  ]
+}

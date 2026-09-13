@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Resume Filler",
+  "version": "0.1.0",
+  "description": "Fills common resume form fields from a local configuration file when requested.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "resume-filler@example.com",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+  "permissions": ["webNavigation"],
+  "action": {
+    "default_title": "Autofill this website"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ]
+}

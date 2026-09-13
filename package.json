@@ -1,0 +1,13 @@
+{
+  "name": "resume-filler",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build": "rm -rf dist && mkdir -p dist && esbuild src/content.ts src/background.ts --bundle --format=iife --platform=browser --target=firefox121 --outdir=dist && cp src/manifest.json dist/manifest.json",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "typescript": "^5.8.0"
+  }
+}
