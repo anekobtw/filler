@@ -25,7 +25,7 @@ Open a new terminal if `pipx` asks you to update `PATH`.
 assoc
 ```
 
-Leave the CSV path blank to search **LinkedIn itself using your existing Firefox login**. First build and load the extension as described below. Keep your usual Firefox open and signed into LinkedIn; `assoc` opens a local handoff tab in that running browser. The extension opens a separate search tab, returns results to your terminal, and closes only the search tab it created. No Playwright, Chromium installation, password storage, or cookie copying is used.
+`assoc` always searches LinkedIn using your existing Firefox login. First build and load the extension as described below. Keep your usual Firefox open and signed into LinkedIn; `assoc` opens a local handoff tab in that running browser. The extension uses an existing LinkedIn tab's Firefox container and window when one is open, opens a separate search tab, returns results to your terminal, and closes only the search tab it created. No Playwright, Chromium installation, password storage, cookie copying, or CSV export is used.
 
 For Firefox containers, leave a LinkedIn tab open in the container holding your account. The extension prefers an active LinkedIn tab, otherwise the first open LinkedIn tab, and creates its search tab in that container and window. If no LinkedIn tab exists, it uses the default container. The `cookies` permission is required by Firefox to select a tab's `cookieStoreId`; the extension does not call the cookies API or read your cookies.
 
@@ -33,7 +33,6 @@ The CLI-to-extension handoff uses a one-use random URL on an ephemeral `127.0.0.
 
 The search checks the signed-in account's first-degree connections for the company or university keywords, then searches people using those keywords together with the configured association signals. It reads up to three pages per query and displays up to 20 unique profiles with the search-card text. These are search leads, not verified employment histories or proof you personally know someone. The applicant URL is a label; it cannot grant access to that person's connections. LinkedIn login challenges, blocks, and unrecognized result pages are reported as failures rather than “no matches.” English LinkedIn UI is required for empty-state detection.
 
-Alternatively, provide a [LinkedIn connections CSV export](https://www.linkedin.com/help/linkedin/answer/a566336). CSV mode uses current-company and configured association signals and requests candidate LinkedIn `/in/` URLs for company mentions. Public profile access may be limited by LinkedIn.
 
 The root `resume.config.json` supplies school, location, and `associationSignals` such as employers, roles, and organizations. If upgrading a previously installed copy, run `pipx install --force --editable .`, rebuild the extension with `npm run build`, and reload it in Firefox. Temporary extensions must be loaded again after restarting Firefox.
 

@@ -30,7 +30,7 @@ declare const browser: {
     getAllFrames(details: { tabId: number }): Promise<ExtensionFrame[]>;
   };
   tabs: {
-    query(queryInfo: { active?: boolean; currentWindow?: boolean; url?: string }): Promise<ExtensionTab[]>;
+    query(queryInfo: { active?: boolean; currentWindow?: boolean; url?: string | string[] }): Promise<ExtensionTab[]>;
     get(tabId: number): Promise<ExtensionTab>;
     create(properties: { url: string; active: boolean; cookieStoreId?: string; windowId?: number }): Promise<ExtensionTab>;
     update(tabId: number, properties: { url: string }): Promise<ExtensionTab>;

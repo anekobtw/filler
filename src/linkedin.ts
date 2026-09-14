@@ -62,7 +62,9 @@ export function extractLinkedInPage(): PageResult {
   ) {
     return { status: "error", error: help };
   }
-  if (location.hostname !== "www.linkedin.com" || location.pathname !== "/search/results/people/") {
+  const isLinkedInHost = location.hostname === "linkedin.com" || location.hostname.endsWith(".linkedin.com");
+  const isPeopleSearch = location.pathname.replace(/\/+$/, "") === "/search/results/people";
+  if (!isLinkedInHost || !isPeopleSearch) {
     return { status: "error", error: `LinkedIn did not open the people search. ${help}` };
   }
   if (/(?:something went wrong|temporarily unavailable|too many requests|commercial use limit|search limit|try again later)/i.test(text)) {
@@ -126,32 +128,32 @@ export function extractLinkedInPage(): PageResult {
   return { status: "pending" };
 }
 
-async function waitForLinkedInPage(tabId: number, expectedUrl: string): Promise<Extract<PageResult, { status: "ready" }>> {
+async function waitForLinkedInPage(tabId: number): Promise<Extract<PageResult, { status: "ready" }>> {
   const deadline = Date.now() + 30_000;
   while (Date.now() < deadline) {
     const tab = await browser.tabs.get(tabId);
-    if (tab.status === "complete") {
-      if (!tab.url || !tab.url.startsWith("https://www.linkedin.com/search/results/people/")) {
+    if (tab.status === "complete" && tab.url) {
+      let url: URL;
+      try {
+        url = new URL(tab.url);
+      } catch {
         throw new Error(`LinkedIn redirected or blocked the search. ${signInHelp}`);
       }
-      const actual = new URL(tab.url);
-      const expected = new URL(expectedUrl);
-      if (
-        actual.searchParams.get("keywords") !== expected.searchParams.get("keywords") ||
-        (actual.searchParams.get("page") ?? "1") !== expected.searchParams.get("page") ||
-        actual.searchParams.get("network") !== expected.searchParams.get("network")
-      ) {
-        throw new Error("The LinkedIn search tab changed unexpectedly. Retry without navigating the search tab.");
+      if (!(url.hostname === "linkedin.com" || url.hostname.endsWith(".linkedin.com"))) {
+        if (url.protocol !== "about:") {
+          throw new Error(`LinkedIn redirected or blocked the search. ${signInHelp}`);
+        }
+      } else {
+        const [injection] = await browser.scripting.executeScript({
+          target: { tabId },
+          world: "ISOLATED",
+          func: extractLinkedInPage,
+        });
+        if (injection?.error) throw new Error(`Cannot read LinkedIn search: ${String(injection.error)}. ${signInHelp}`);
+        const page = injection?.result;
+        if (page?.status === "error") throw new Error(page.error);
+        if (page?.status === "ready") return page;
       }
-      const [injection] = await browser.scripting.executeScript({
-        target: { tabId },
-        world: "ISOLATED",
-        func: extractLinkedInPage,
-      });
-      if (injection?.error) throw new Error(`Cannot read LinkedIn search: ${String(injection.error)}. ${signInHelp}`);
-      const page = injection?.result;
-      if (page?.status === "error") throw new Error(page.error);
-      if (page?.status === "ready") return page;
     }
     // Promise.withResolvers is unavailable in the project's ES2022 / Firefox 121 target.
     await new Promise((resolve) => setTimeout(resolve, 500));
@@ -160,7 +162,7 @@ async function waitForLinkedInPage(tabId: number, expectedUrl: string): Promise<
 }
 
 export async function searchLinkedIn(queries: AssocQuery[]): Promise<AssocResult[]> {
-  const existingTabs = await browser.tabs.query({ url: "https://*.linkedin.com/*" });
+  const existingTabs = await browser.tabs.query({ url: ["https://linkedin.com/*", "https://*.linkedin.com/*"] });
   const sessionTab = existingTabs.find((tab) => tab.active) ?? existingTabs[0];
   const firstUrl = linkedInSearchUrl(queries[0], 1);
   const searchTab = await browser.tabs.create({
@@ -182,7 +184,7 @@ export async function searchLinkedIn(queries: AssocQuery[]): Promise<AssocResult
         if (queryIndex !== 0 || pageNumber !== 1) {
           await browser.tabs.update(tabId, { url });
         }
-        const page = await waitForLinkedInPage(tabId, url);
+        const page = await waitForLinkedInPage(tabId);
         for (const result of page.results) {
           if (seen.has(result.url)) continue;
           seen.add(result.url);
