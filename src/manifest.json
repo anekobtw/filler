@@ -11,9 +11,10 @@
       }
     }
   },
-  "permissions": ["webNavigation"],
+  "permissions": ["storage", "webNavigation"],
   "action": {
-    "default_title": "Autofill this website"
+    "default_title": "Resume Filler",
+    "default_popup": "popup.html"
   },
   "background": {
     "scripts": ["background.js"]

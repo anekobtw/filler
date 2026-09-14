@@ -1,28 +1,23 @@
-import rawConfig from "./resume.config.json";
-
-type FieldRule = {
-  keywords: string[];
-  value: string;
-  inputTypes?: string[];
-  priority?: number;
-  selectPartialMatch?: boolean;
-};
-
-type ResumeConfig = {
-  overwriteExisting?: boolean;
-  fields: FieldRule[];
-};
+import {
+  currentConfig,
+  type FieldRule,
+  type ResumeConfig,
+} from "./configuration";
 
 type FillableElement =
   | HTMLInputElement
   | HTMLTextAreaElement
   | HTMLSelectElement;
 
-type AutofillMessage = {
-  type?: string;
-};
+function isAutofillMessage(message: unknown): boolean {
+  return (
+    typeof message === "object" &&
+    message !== null &&
+    "type" in message &&
+    message.type === "autofill"
+  );
+}
 
-const config = rawConfig as ResumeConfig;
 const elementSelector = "input, textarea, select";
 const ignoredInputTypes: Record<string, true> = {
   button: true,
@@ -113,7 +108,10 @@ function textForElement(element: FillableElement): string {
   );
 }
 
-function matchingRule(element: FillableElement): FieldRule | undefined {
+function matchingRule(
+  config: ResumeConfig,
+  element: FillableElement,
+): FieldRule | undefined {
   const fieldText = textForElement(element);
   const inputType =
     element instanceof HTMLInputElement
@@ -194,7 +192,7 @@ function fillSelect(
   return true;
 }
 
-function canFill(element: FillableElement): boolean {
+function canFill(config: ResumeConfig, element: FillableElement): boolean {
   if (
     element.disabled ||
     ((element instanceof HTMLInputElement ||
@@ -267,9 +265,12 @@ async function fillCombobox(
 }
 
 
-async function fillElement(element: FillableElement): Promise<boolean> {
-  if (!canFill(element)) return false;
-  const rule = matchingRule(element);
+async function fillElement(
+  config: ResumeConfig,
+  element: FillableElement,
+): Promise<boolean> {
+  if (!canFill(config, element)) return false;
+  const rule = matchingRule(config, element);
   if (!rule) return false;
 
   if (element instanceof HTMLSelectElement)
@@ -284,17 +285,22 @@ async function fillElement(element: FillableElement): Promise<boolean> {
 }
 
 
-async function fillDocument(): Promise<number> {
+async function fillDocument(config: ResumeConfig): Promise<number> {
   let filled = 0;
   for (const element of document.querySelectorAll<FillableElement>(
     elementSelector,
   )) {
-    if (await fillElement(element)) filled += 1;
+    if (await fillElement(config, element)) filled += 1;
   }
   return filled;
 }
 
+async function storedConfig(): Promise<ResumeConfig> {
+  const { config } = await browser.storage.local.get("config");
+  return currentConfig(config);
+}
+
 browser.runtime.onMessage.addListener((message: unknown) => {
-  if ((message as AutofillMessage).type !== "autofill") return;
-  void fillDocument();
+  if (!isAutofillMessage(message)) return;
+  void storedConfig().then(fillDocument);
 });

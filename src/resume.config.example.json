@@ -86,10 +86,6 @@
       "value": "No"
     },
     {
-      "keywords": ["gender identity", "gender identification"],
-      "value": "Your gender identity"
-    },
-    {
       "keywords": ["gender"],
       "value": "Your gender"
     },

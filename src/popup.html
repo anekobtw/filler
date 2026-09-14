@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resume Filler</title>
+    <style>
+      body { box-sizing: border-box; font: 14px system-ui, sans-serif; margin: 0; width: 360px; }
+      main { padding: 16px; }
+      h1 { font-size: 18px; margin: 0 0 4px; }
+      p { color: #4a4a4a; margin: 0 0 14px; }
+      form { display: grid; gap: 10px; max-height: 420px; overflow-y: auto; padding-right: 4px; }
+      label { display: grid; font-weight: 600; gap: 4px; }
+      input { box-sizing: border-box; font: inherit; padding: 7px; width: 100%; }
+      footer { display: flex; gap: 8px; margin-top: 16px; }
+      button { cursor: pointer; font: inherit; padding: 8px 10px; }
+      #fill { margin-left: auto; }
+      #status { display: block; min-height: 18px; margin-top: 8px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Resume Filler</h1>
+      <p>Answer the questions once. Your answers stay in this browser.</p>
+      <form id="config-form"></form>
+      <footer>
+        <button id="reset" type="button">Reset</button>
+        <button id="save" type="submit" form="config-form">Save</button>
+        <button id="fill" type="button">Autofill page</button>
+      </footer>
+      <output id="status" aria-live="polite"></output>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
