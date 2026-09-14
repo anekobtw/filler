@@ -1,3 +1,7 @@
+import { registerAssocSearch } from "./linkedin";
+
+registerAssocSearch();
+
 async function fillAllFrames(tabId: number): Promise<void> {
   const frames = await browser.webNavigation.getAllFrames({ tabId });
   await Promise.all(

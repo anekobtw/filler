@@ -1,5 +1,10 @@
 {
   "overwriteExisting": false,
+  "associationSignals": [
+    "Student organization",
+    "Research assistant",
+    "Previous employer"
+  ],
   "fields": [
     {
       "keywords": ["first name", "given name", "forename", "fname"],

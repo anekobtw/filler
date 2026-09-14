@@ -20,12 +20,17 @@ def applicant_details(config_path: Path) -> tuple[str, list[str]]:
         "school", "university", "college", "institution", "location", "city",
         "company", "employer", "organization",
     )
-    associations = [
+    field_signals = [
         value
         for keyword in association_keywords
         if (value := config_value(config, keyword))
     ]
-    return linkedin, list(dict.fromkeys(associations))[:5]
+    configured_signals = config.get("associationSignals", [])
+    if not isinstance(configured_signals, list) or not all(
+        isinstance(signal, str) for signal in configured_signals
+    ):
+        raise ValueError("associationSignals must be a list of strings")
+    return linkedin, list(dict.fromkeys([*field_signals, *configured_signals]))[:10]
 
 
 def sender_email(config_path: Path) -> str:

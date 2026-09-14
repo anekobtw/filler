@@ -11,7 +11,8 @@
       }
     }
   },
-  "permissions": ["storage", "webNavigation"],
+  "permissions": ["storage", "webNavigation", "scripting", "cookies"],
+  "host_permissions": ["http://127.0.0.1/*", "https://*.linkedin.com/*"],
   "action": {
     "default_title": "Resume Filler",
     "default_popup": "popup.html"
@@ -20,6 +21,11 @@
     "scripts": ["background.js"]
   },
   "content_scripts": [
+    {
+      "matches": ["http://127.0.0.1/*"],
+      "js": ["assoc-bridge.js"],
+      "run_at": "document_idle"
+    },
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"],
