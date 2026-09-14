@@ -142,5 +142,7 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 # Personal resume-filler data
-src/resume.config.json
+resume.config.json
+recipients.json
 .vite/
+.venv/

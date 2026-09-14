@@ -1,4 +1,4 @@
-import rawConfig from "./resume.config.json";
+import rawConfig from "../resume.config.json";
 
 export type FieldRule = {
   keywords: string[];

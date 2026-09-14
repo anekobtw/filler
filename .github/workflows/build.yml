@@ -17,6 +17,6 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: cp src/resume.config.example.json src/resume.config.json
+      - run: cp resume.config.example.json resume.config.json
       - run: npm run typecheck
       - run: npm run build
