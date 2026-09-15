@@ -146,3 +146,7 @@ resume.config.json
 recipients.json
 .vite/
 .venv/
+
+# Python bytecode caches
+__pycache__/
+*.py[cod]

@@ -27,3 +27,14 @@ if (
     },
   );
 }
+
+if (
+  window === window.top &&
+  location.protocol === "http:" &&
+  location.hostname === "127.0.0.1" &&
+  /^\d+$/.test(location.port) &&
+  /^\/autofill\/[A-Za-z0-9_-]{43}$/.test(location.pathname) &&
+  !location.search && !location.hash
+) {
+  void browser.runtime.sendMessage({ type: "autofill-request", url: location.href });
+}

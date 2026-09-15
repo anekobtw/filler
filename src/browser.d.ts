@@ -36,6 +36,9 @@ declare const browser: {
     update(tabId: number, properties: { url: string }): Promise<ExtensionTab>;
     remove(tabId: number): Promise<void>;
     sendMessage(tabId: number, message: unknown, options?: { frameId: number }): Promise<unknown>;
+    onActivated: {
+      addListener(listener: (activeInfo: { tabId: number }) => void): void;
+    };
   };
   scripting: {
     executeScript<T>(injection: {

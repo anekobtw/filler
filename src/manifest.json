@@ -13,10 +13,6 @@
   },
   "permissions": ["storage", "webNavigation", "scripting", "cookies"],
   "host_permissions": ["http://127.0.0.1/*", "https://*.linkedin.com/*"],
-  "action": {
-    "default_title": "Resume Filler",
-    "default_popup": "popup.html"
-  },
   "background": {
     "scripts": ["background.js"]
   },

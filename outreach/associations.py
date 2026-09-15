@@ -43,7 +43,7 @@ def association_matches(row: dict[str, str], associations: list[str]) -> list[st
 
 
 def linkedin_candidates(
-    company: str, associations: list[str]
+    company: str, associations: list[str], show_progress: bool = True
 ) -> list[tuple[SearchResult, list[str]]]:
     """Search through the extension in the user's existing Firefox session."""
     queries = [{"keywords": company, "direct": True}]
@@ -51,7 +51,7 @@ def linkedin_candidates(
         shared = " OR ".join(f'"{signal.replace(chr(34), "")}"' for signal in associations)
         queries.append({"keywords": f'"{company.replace(chr(34), "")}" AND ({shared})', "direct": False})
     candidates: dict[str, tuple[SearchResult, list[str]]] = {}
-    for row in search_firefox(queries):
+    for row in search_firefox(queries, show_progress=show_progress):
         matches = association_matches({"text": row["snippet"]}, associations)
         if row["direct"]:
             matches.insert(0, "1st-degree connection (LinkedIn search)")

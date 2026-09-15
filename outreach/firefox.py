@@ -17,7 +17,9 @@ def open_firefox(url: str) -> None:
     subprocess.Popen([executable, "--new-tab", url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
-def search_firefox(queries: list[dict[str, object]], timeout: float = 300) -> list[dict[str, object]]:
+def search_firefox(
+    queries: list[dict[str, object]], timeout: float = 300, show_progress: bool = True
+) -> list[dict[str, object]]:
     token_path = "/assoc/" + secrets.token_urlsafe(32)
     response: dict[str, object] | None = None
     claimed = False
@@ -114,9 +116,10 @@ def search_firefox(queries: list[dict[str, object]], timeout: float = 300) -> li
 
     with HandoffServer(("127.0.0.1", 0), Handler) as server:
         server.timeout = 0.5
-        print("Opening a tab in your existing Firefox. Keep the Resume Filler extension enabled.")
-        print("If the handoff page stays waiting, reload dist/manifest.json in about:debugging.")
-        print("Waiting for LinkedIn search results (up to five minutes); Ctrl+C cancels.")
+        if show_progress:
+            print("Opening a tab in your existing Firefox. Keep the Resume Filler extension enabled.")
+            print("If the handoff page stays waiting, reload dist/manifest.json in about:debugging.")
+            print("Waiting for LinkedIn search results (up to five minutes); Ctrl+C cancels.")
         open_firefox(f"http://127.0.0.1:{server.server_port}{token_path}")
         deadline = time.monotonic() + timeout
         while response is None and time.monotonic() < deadline:

@@ -9,9 +9,7 @@ packages = [{ include = "outreach" }]
 python = ">=3.11,<4.0"
 
 [tool.poetry.scripts]
-assoc = "outreach.associations:main"
-cold-email = "outreach.email:main"
-
+filler = "outreach.filler:main"
 [build-system]
 requires = ["poetry-core>=2.0.0"]
 build-backend = "poetry.core.masonry.api"
