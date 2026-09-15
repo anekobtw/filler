@@ -35,6 +35,8 @@ npm ci
 
 ## Use the command center
 
+Run the command from the directory containing your `resume.config.json`:
+
 ```sh
 filler
 ```

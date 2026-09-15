@@ -16,7 +16,8 @@ from .associations import SearchResult, linkedin_candidates
 from .config import applicant_details, load_config
 from .firefox import open_firefox
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-CONFIG_PATH = PROJECT_ROOT / "resume.config.json"
+CONFIG_NAME = "resume.config.json"
+
 
 
 @dataclass(frozen=True)
@@ -54,8 +55,11 @@ def build_extension(root: Path = PROJECT_ROOT) -> str:
     return "Build complete. In Firefox: Load Temporary Add-on → dist/manifest.json."
 
 
-def save_config(config: dict[str, object], path: Path = CONFIG_PATH) -> None:
-    path.write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
+def save_config(config: dict[str, object], path: Path | None = None) -> None:
+    (path or Path.cwd() / CONFIG_NAME).write_text(
+        json.dumps(config, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
 
 
@@ -97,9 +101,8 @@ class FillerApp:
     muted = 3
     error = 4
 
-    def __init__(self, config_path: Path = CONFIG_PATH) -> None:
-        self.config_path = config_path
-        self.status = "Choose an action. ↑/↓ to move, Enter to select, q to quit."
+    def __init__(self, config_path: Path | None = None) -> None:
+        self.config_path = config_path or Path.cwd() / CONFIG_NAME
 
     def run(self) -> None:
         curses.wrapper(self._main)

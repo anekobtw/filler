@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && esbuild src/content.ts src/background.ts src/assoc-bridge.ts --bundle --format=iife --platform=browser --target=firefox121 --outdir=dist && cp src/manifest.json dist/",
+    "build": "rm -rf dist && mkdir -p dist && esbuild plugin/content.ts plugin/background.ts plugin/assoc-bridge.ts --bundle --format=iife --platform=browser --target=firefox121 --outdir=dist && cp plugin/manifest.json dist/",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
