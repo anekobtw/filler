@@ -103,6 +103,7 @@ class FillerApp:
 
     def __init__(self, config_path: Path | None = None) -> None:
         self.config_path = config_path or Path.cwd() / CONFIG_NAME
+        self.status = "Choose an action. ↑/↓ to move, Enter to select, q to quit."
 
     def run(self) -> None:
         curses.wrapper(self._main)
