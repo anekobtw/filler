@@ -1,4 +1,4 @@
-name: Build
+name: CI
 
 on:
   push:
@@ -16,6 +16,12 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - run: pipx install poetry
+      - run: poetry check --lock
+      - run: poetry build --output /tmp/resume-filler-python-dist
       - run: npm ci
       - run: cp resume.config.example.json resume.config.json
       - run: npm run typecheck
